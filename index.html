@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказы</title>
+</head>
+<body>
+    <h1>Заказы в процессе</h1>
+    <ul>
+        {% for order in in_progress %}
+        <li>{{ order.item }} - <a href="/update/{{ order.id }}">Отметить как готовый</a></li>
+        {% else %}
+        <li>Нет заказов в процессе</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Готовые заказы</h1>
+    <ul>
+        {% for order in ready %}
+        <li>{{ order.item }}
+            <form action="/delete/{{ order.id }}" method="POST" style="display: inline;">
+                <button type="submit">Удалить</button>
+            </form>
+        </li>
+        {% else %}
+        <li>Нет готовых заказов</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/new-order">Добавить новый заказ</a>
+    <br><br>
+
+    <!-- Добавляем ссылку на страницу для гостей -->
+    <a href="/guest">Страница для гостей (только номера заказов)</a>
+
+</body>
+</html>

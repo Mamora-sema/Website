@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статус заказов для гостей</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+        .orders {
+            width: 40%;
+        }
+        h2 {
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            font-size: 1.5em;
+            padding: 10px;
+            text-align: center;
+        }
+        li.ready {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        li.in-progress {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Статус заказов</h1>
+    <div class="container">
+        <div class="orders">
+            <h2>Готовятся</h2>
+            <ul id="in-progress-list">
+                <!-- Список заказов будет загружен с помощью JavaScript -->
+            </ul>
+        </div>
+        <div class="orders">
+            <h2>Готовы</h2>
+            <ul id="ready-list">
+                <!-- Список заказов будет загружен с помощью JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function fetchOrders() {
+            fetch('/api/orders')
+                .then(response => response.json())
+                .then(data => {
+                    const inProgressList = document.getElementById('in-progress-list');
+                    const readyList = document.getElementById('ready-list');
+
+                    inProgressList.innerHTML = '';
+                    readyList.innerHTML = '';
+
+                    data.in_progress.forEach(id => {
+                        const li = document.createElement('li');
+                        li.className = 'in-progress';
+                        li.textContent = `Заказ №${id}`;
+                        inProgressList.appendChild(li);
+                    });
+
+                    data.ready.forEach(id => {
+                        const li = document.createElement('li');
+                        li.className = 'ready';
+                        li.textContent = `Заказ №${id}`;
+                        readyList.appendChild(li);
+                    });
+                });
+        }
+
+        // Обновляем данные каждые 5 секунд
+        setInterval(fetchOrders, 5000);
+
+        // Получаем данные сразу при загрузке страницы
+        window.onload = fetchOrders;
+    </script>
+</body>
+</html>
